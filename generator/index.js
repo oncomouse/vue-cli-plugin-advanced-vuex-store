@@ -1,50 +1,42 @@
 module.exports = (api) => {
-  const helpers = require('./helpers')(api); // eslint-disable-line global-require
-
-  api.render((tree) => {
-    if (Object.prototype.hasOwnProperty.call(tree, helpers.getStore())) {
+  // const helpers = require('./helpers')(api); // eslint-disable-line global-require
+  api.extendPackage({
+    dependencies: {
+      vuex: '^3.0.1',
+      'vuex-persistedstate': '^2.5.4',
+    },
+  });
+  api.injectImports(api.entryFile(), 'import configureStore from \'./store\';');
+  api.injectRootOptions(api.entryFile(), 'store: configureStore()');
+  api.render('./template');
+  /* api.render((tree) => {
+     if (Object.prototype.hasOwnProperty.call(tree, helpers.getStore())) {
       // Get rid of the old store file:
       delete tree[helpers.getStore()]; // eslint-disable-line no-param-reassign
-
-      // Also remove the import statement for that file:
-      const mainSrc = tree[helpers.getMain()];
-      // eslint-disable-next-line no-param-reassign
-      tree[helpers.getMain()] = mainSrc.replace(/import store from ["']\.\/store["'];{0,1}\n/, '');
     } else {
       // Otherwise, we are installing vuex for the first time:
-      api.extendPackage({
-        dependencies: {
-          vuex: '^3.0.1',
-        },
-      });
     }
-    // Install vuex-persistedstate:
-    api.extendPackage({
-      dependencies: {
-        'vuex-persistedstate': '^2.5.4',
-      },
-    });
-    // Load the main file source:
-    const mainSrc = tree[helpers.getMain()];
+     Install vuex-persistedstate:
+     api.extendPackage({
+       dependencies: {
+         vuex: '^3.0.1',
+         'vuex-persistedstate': '^2.5.4',
+       },
+     });
+     if (Object.prototype.hasOwnProperty.call(api.generator.imports, api.entryFile())) {
+      api.generator.imports[api.entryFile()]
+        .entries()
+        .filter(/import store/.test)
+        .forEach(file => api.generator.imports[api.entryFile()].delete(file));
+    }
+     api.injectImports(api.entryFile(), 'import configureStore from \'./store\';');
 
-    // Find the last import statement in the file:
-    const imports = mainSrc.match(/import [0-9a-zA-Z_$]+ from (["'])[^'"]+["'](;{0,1})/g);
-    const lastImport = imports.slice(-1)[0];
-
-    // Make sure we maintain the project's syntax preferences:
-    const impPieces = lastImport.match(/import [0-9a-zA-Z_$]+ from (["'])[^'"]+["'](;{0,1})/);
-
-    // Add our new import statement and configure the store:
-    // eslint-disable-next-line no-param-reassign
-    tree[helpers.getMain()] = mainSrc.replace(
-      lastImport,
-      `${lastImport}
-import configureStore from ${impPieces[1]}./store${impPieces[1]}${impPieces[2]}
-
-const store = configureStore()${impPieces[2]}`,
-    );
-  });
+     if (Object.prototype.hasOwnProperty.call(api.generator.rootOptions, api.entryFile())) {
+      api.generator.imports[api.entryFile()].delete('store');
+    }
+     api.injectRootOptions(api.entryFile(), 'store: configureStore()');
+   });
 
   // Render the other files in the template directory:
-  api.render('./template');
+  */
 };
