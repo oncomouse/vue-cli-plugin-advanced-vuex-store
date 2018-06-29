@@ -6,8 +6,8 @@ module.exports = (api) => {
       'vuex-persistedstate': '^2.5.4',
     },
   });
-  api.injectImports(api.entryFile(), 'import configureStore from \'./store\';');
-  api.injectRootOptions(api.entryFile(), 'store: configureStore()');
+  api.injectImports(api.entryFile, 'import configureStore from \'./store\';');
+  api.injectRootOptions(api.entryFile, 'store: configureStore()');
   api.render('./template');
   /* api.render((tree) => {
      if (Object.prototype.hasOwnProperty.call(tree, helpers.getStore())) {
@@ -23,18 +23,18 @@ module.exports = (api) => {
          'vuex-persistedstate': '^2.5.4',
        },
      });
-     if (Object.prototype.hasOwnProperty.call(api.generator.imports, api.entryFile())) {
-      api.generator.imports[api.entryFile()]
+     if (Object.prototype.hasOwnProperty.call(api.generator.imports, api.entryFile)) {
+      api.generator.imports[api.entryFile]
         .entries()
         .filter(/import store/.test)
-        .forEach(file => api.generator.imports[api.entryFile()].delete(file));
+        .forEach(file => api.generator.imports[api.entryFile].delete(file));
     }
-     api.injectImports(api.entryFile(), 'import configureStore from \'./store\';');
+     api.injectImports(api.entryFile, 'import configureStore from \'./store\';');
 
-     if (Object.prototype.hasOwnProperty.call(api.generator.rootOptions, api.entryFile())) {
-      api.generator.imports[api.entryFile()].delete('store');
+     if (Object.prototype.hasOwnProperty.call(api.generator.rootOptions, api.entryFile)) {
+      api.generator.imports[api.entryFile].delete('store');
     }
-     api.injectRootOptions(api.entryFile(), 'store: configureStore()');
+     api.injectRootOptions(api.entryFile, 'store: configureStore()');
    });
 
   // Render the other files in the template directory:
